@@ -26,6 +26,7 @@ namespace RH.Instruments
             _camera = GetComponent<Camera>();
         }
 
+#if UNITY_EDITOR
         /// <summary>
         /// Запускает процесс создаения иконок для списка игровых объектов
         /// </summary>
@@ -102,5 +103,6 @@ namespace RH.Instruments
 
             _camera.clearFlags = clearFlags; // восстановление настроек камеры
         }
+#endif
     }
 }
