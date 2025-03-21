@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6707ba4213fab864cbb1dc06851c27d3, type: 3}
+  m_Name: LockItemConfig
+  m_EditorClassIdentifier: 
+  type: 2
+  id: InventoryItem_Lock
+  itemName: Lock
+  weight: 1500
+  icon: {fileID: 21300000, guid: ad2fbdbc2cf397b419b1e8da8c70876a, type: 3}
+  prefab: {fileID: 3095663493628497290, guid: 0bfd304347b20964bb84c890a99eebaa, type: 3}
