@@ -5,61 +5,87 @@ using UnityEngine.EventSystems;
 namespace BackpackInventory
 {
     /// <summary>
-    /// Добавляет возможность пермещения объекта в 3д пространстве с помощью мыши
+    /// Добавляет возможность перемещения объекта в 3D пространстве с помощью мыши
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     public class Drag3dObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
     {
         private Rigidbody m_rigidbody;
         private Vector3 m_offset;
-
+        private float m_objectHeight;
+        private Collider m_collider;
 
         /// <summary>
-        /// Собыитые возникающее в началае перемещения объекта
+        /// Событие, возникающее в начале перемещения объекта
         /// </summary>
         public UnityEvent BeginDraggingEvent { get; private set; } = new();
         /// <summary>
-        /// Собыитые возникающее в после перемещения объекта
+        /// Событие, возникающее после перемещения объекта
         /// </summary>
         public UnityEvent EndDraggingEvent { get; private set; } = new();
-
 
         private void Awake()
         {
             m_rigidbody = GetComponent<Rigidbody>();
+            m_collider = GetComponent<Collider>();
+            m_objectHeight = m_collider.bounds.extents.y; // Вычисление высоты объекта для корректной установки на поверхности
         }
 
-
         /// <summary>
-        /// Отключение динамики объекта
+        /// Отключение динамики объекта в начале перемещения
         /// </summary>
-        /// <param name="eventData"></param>
         public void OnBeginDrag(PointerEventData eventData)
         {
             m_rigidbody.isKinematic = true;
-
-            // Вычисление смещения между позицией объекта и позицией курсора
             m_offset = transform.position - GetMouseWorldPos();
-
             BeginDraggingEvent.Invoke();
         }
 
         /// <summary>
-        /// Расчет позиции предмета при перемещении мышью
+        /// Расчет позиции объекта при перемещении мышью
         /// </summary>
-        /// <param name="eventData"></param>
         public void OnDrag(PointerEventData eventData)
         {
-            transform.position = GetMouseWorldPos() + m_offset;
+            Vector3 targetPosition = GetMouseWorldPos() + m_offset;
+
+            // Поиск ближайшей поверхности под объектом
+            RaycastHit? closestHit = GetClosestHit(
+                targetPosition + Vector3.up * 5f,
+                Vector3.down,
+                10f,
+                ~0
+            );
+
+            // Корректировка позиции объекта по высоте
+            if (closestHit.HasValue)
+            {
+                targetPosition.y = closestHit.Value.point.y + m_objectHeight;
+            }
+
+            transform.position = targetPosition;
         }
 
         /// <summary>
-        /// Включение динамики объекта
+        /// Включение динамики объекта после перемещения
         /// </summary>
-        /// <param name="eventData"></param>
         public void OnEndDrag(PointerEventData eventData)
         {
             m_rigidbody.isKinematic = false;
+
+            // Фиксация конечной позиции с учетом поверхности
+            RaycastHit? closestHit = GetClosestHit(
+                transform.position + Vector3.up * 5f,
+                Vector3.down,
+                10f,
+                ~0
+            );
+
+            if (closestHit.HasValue)
+            {
+                Vector3 finalPosition = transform.position;
+                finalPosition.y = closestHit.Value.point.y + m_objectHeight;
+                transform.position = finalPosition;
+            }
 
             EndDraggingEvent.Invoke();
         }
@@ -67,20 +93,44 @@ namespace BackpackInventory
         /// <summary>
         /// Получение позиции мыши на поверхности предметов и окружения
         /// </summary>
-        /// <returns>Позиция Vector3 в глабальной системе координат</returns>
+        /// <returns>Позиция Vector3 в глобальной системе координат</returns>
         private Vector3 GetMouseWorldPos()
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
+            RaycastHit? closestHit = GetClosestHit(
+                ray.origin,
+                ray.direction,
+                Mathf.Infinity,
+                ~0
+            );
 
-            // Проверяем, пересекает ли луч объекты сцены
-            if (Physics.Raycast(ray, out hit))
+            return closestHit?.point ?? transform.position;
+        }
+
+        /// <summary>
+        /// Находит ближайшее пересечение луча с поверхностями, игнорируя собственный коллайдер
+        /// </summary>
+        /// <param name="origin">Начальная точка луча</param>
+        /// <param name="direction">Направление луча</param>
+        /// <param name="maxDistance">Максимальная дистанция</param>
+        /// <param name="layerMask">Маска слоев</param>
+        /// <returns>Ближайшее пересечение или null</returns>
+        private RaycastHit? GetClosestHit(Vector3 origin, Vector3 direction, float maxDistance, LayerMask layerMask)
+        {
+            Ray ray = new Ray(origin, direction);
+            RaycastHit[] hits = Physics.RaycastAll(ray, maxDistance, layerMask, QueryTriggerInteraction.Ignore);
+
+            RaycastHit? closestHit = null;
+            foreach (var hit in hits)
             {
-                return hit.point;
-            }
+                if (hit.collider == m_collider) continue;
 
-            // Если луч ни с чем не пересекся, возвращаем позицию объекта
-            return transform.position;
+                if (closestHit == null || hit.distance < closestHit.Value.distance)
+                {
+                    closestHit = hit;
+                }
+            }
+            return closestHit;
         }
     }
 }
