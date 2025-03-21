@@ -52,7 +52,11 @@ namespace BackpackInventory
             {
                 response = "success",
                 status = "data received",
-                data_submitted = $"{itemId} {eventType.ToString()}"
+                data_submitted = new DataSubmitted()
+                {
+                    item_id = itemId,
+                    event_type = eventType.ToString()
+                }
             });
 
             // Создание нового запроса
@@ -63,7 +67,7 @@ namespace BackpackInventory
                 webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
                 webRequest.downloadHandler = new DownloadHandlerBuffer();
                 webRequest.SetRequestHeader("Content-Type", "application/json");
-                webRequest.SetRequestHeader("Authorization", _authToken);
+                webRequest.SetRequestHeader("Authorization", "Bearer " + _authToken);
 
                 // Отправка запроса и ожидание ответа
                 await webRequest.SendWebRequest().ToUniTask();
