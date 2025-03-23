@@ -8,12 +8,12 @@ using Zenject;
 namespace BackpackInventory
 {
     /// <summary>
-    /// Модуль отправки POST-запросов на сервер при добавлении и удалении предметов из инвентаря
+    /// РњРѕРґСѓР»СЊ РѕС‚РїСЂР°РІРєРё POST-Р·Р°РїСЂРѕСЃРѕРІ РЅР° СЃРµСЂРІРµСЂ РїСЂРё РґРѕР±Р°РІР»РµРЅРёРё Рё СѓРґР°Р»РµРЅРёРё РїСЂРµРґРјРµС‚РѕРІ РёР· РёРЅРІРµРЅС‚Р°СЂСЏ
     /// </summary>
     public class WebRequestDispatcher : IDisposable
     {
-        private string _serverUrl = "https://wadahub.manerai.com/api/inventory/status";
-        private string _authToken;
+        private const string _serverUrl = "https://wadahub.manerai.com/api/inventory/status";
+        private readonly string _authToken;
 
         private Inventory _inventory;
 
@@ -43,11 +43,11 @@ namespace BackpackInventory
 
 
         /// <summary>
-        /// Отправка сведений в POST-запросе на сервер
+        /// РћС‚РїСЂР°РІРєР° СЃРІРµРґРµРЅРёР№ РІ POST-Р·Р°РїСЂРѕСЃРµ РЅР° СЃРµСЂРІРµСЂ
         /// </summary>
         public async UniTaskVoid SendPOSTRequest(string itemId, InventoryEventType eventType)
         {
-            // Сериализация данных в строку
+            // РЎРµСЂРёР°Р»РёР·Р°С†РёСЏ РґР°РЅРЅС‹С… РІ СЃС‚СЂРѕРєСѓ
             string jsonData = JsonUtility.ToJson(new ApiResponse()
             {
                 response = "success",
@@ -59,20 +59,20 @@ namespace BackpackInventory
                 }
             });
 
-            // Создание нового запроса
+            // РЎРѕР·РґР°РЅРёРµ РЅРѕРІРѕРіРѕ Р·Р°РїСЂРѕСЃР°
             using (UnityWebRequest webRequest = new UnityWebRequest(_serverUrl, "POST"))
             {
-                // Преобразование строки в массив байтов и настройка запроса
+                // РџСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЃС‚СЂРѕРєРё РІ РјР°СЃСЃРёРІ Р±Р°Р№С‚РѕРІ Рё РЅР°СЃС‚СЂРѕР№РєР° Р·Р°РїСЂРѕСЃР°
                 byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(jsonData);
                 webRequest.uploadHandler = new UploadHandlerRaw(bodyRaw);
                 webRequest.downloadHandler = new DownloadHandlerBuffer();
                 webRequest.SetRequestHeader("Content-Type", "application/json");
                 webRequest.SetRequestHeader("Authorization", "Bearer " + _authToken);
 
-                // Отправка запроса и ожидание ответа
+                // РћС‚РїСЂР°РІРєР° Р·Р°РїСЂРѕСЃР° Рё РѕР¶РёРґР°РЅРёРµ РѕС‚РІРµС‚Р°
                 await webRequest.SendWebRequest().ToUniTask();
 
-                // Обработка ответа от сервера
+                // РћР±СЂР°Р±РѕС‚РєР° РѕС‚РІРµС‚Р° РѕС‚ СЃРµСЂРІРµСЂР°
                 if (webRequest.result == UnityWebRequest.Result.ConnectionError || webRequest.result == UnityWebRequest.Result.ProtocolError)
                 {
                     Debug.LogError("Error: " + webRequest.error);

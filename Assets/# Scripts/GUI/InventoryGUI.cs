@@ -4,7 +4,7 @@ using UnityEngine.UI;
 namespace BackpackInventory
 {
     /// <summary>
-    /// Пользовательский интерфейс для отображения содержимого инвентаря
+    /// РџРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёР№ РёРЅС‚РµСЂС„РµР№СЃ РґР»СЏ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ СЃРѕРґРµСЂР¶РёРјРѕРіРѕ РёРЅРІРµРЅС‚Р°СЂСЏ
     /// </summary>
     public class InventoryGUI : MonoBehaviour
     {
@@ -18,7 +18,7 @@ namespace BackpackInventory
             gameObject.SetActive(false);
             _inventory = GetComponentInParent<Inventory>();
 
-            foreach (var item in slotIcons) item.color = new Color(0, 0, 0, 0); // прозрачная картинка
+            foreach (var item in slotIcons) item.color = new Color(0, 0, 0, 0); // РїСЂРѕР·СЂР°С‡РЅР°СЏ РєР°СЂС‚РёРЅРєР°
 
             _inventory?.ItemAddedEvent.AddListener(ReDraw);
             _inventory?.ItemRemovedEvent.AddListener(ReDraw);
@@ -26,12 +26,12 @@ namespace BackpackInventory
 
         private void Start()
         {
-            if (_inventory.Slots.Length != slotIcons.Length) throw new("Кол-во слотов в UI не совпадает с кол-ом слотов в инвентаре");
+            if (_inventory.Slots.Length != slotIcons.Length) throw new("РљРѕР»-РІРѕ СЃР»РѕС‚РѕРІ РІ UI РЅРµ СЃРѕРІРїР°РґР°РµС‚ СЃ РєРѕР»-РѕРј СЃР»РѕС‚РѕРІ РІ РёРЅРІРµРЅС‚Р°СЂРµ");
         }
 
 
         /// <summary>
-        /// Обновляет сведения инвентаря в GUI на актуальные
+        /// РћР±РЅРѕРІР»СЏРµС‚ СЃРІРµРґРµРЅРёСЏ РёРЅРІРµРЅС‚Р°СЂСЏ РІ GUI РЅР° Р°РєС‚СѓР°Р»СЊРЅС‹Рµ
         /// </summary>
         public void ReDraw(string id)
         {
@@ -42,12 +42,12 @@ namespace BackpackInventory
                 if (slots[i].Item is null)
                 {
                     slotIcons[i].sprite = null;
-                    slotIcons[i].color = new Color(0, 0, 0, 0); // прозрачная картинка
+                    slotIcons[i].color = new Color(0, 0, 0, 0); // РїСЂРѕР·СЂР°С‡РЅР°СЏ РєР°СЂС‚РёРЅРєР°
                 }
                 else
                 {
                     slotIcons[i].sprite = slots[i].Item.Config.icon;
-                    slotIcons[i].color = Color.white; // стандартная, видимая картинка
+                    slotIcons[i].color = Color.white; // СЃС‚Р°РЅРґР°СЂС‚РЅР°СЏ, РІРёРґРёРјР°СЏ РєР°СЂС‚РёРЅРєР°
                 }
             }
         }

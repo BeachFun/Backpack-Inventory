@@ -3,12 +3,12 @@ using UnityEngine;
 namespace BackpackInventory
 {
     /// <summary>
-    /// Конфигурация предмета для инвентаря
+    /// РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ РїСЂРµРґРјРµС‚Р° РґР»СЏ РёРЅРІРµРЅС‚Р°СЂСЏ
     /// </summary>
     [CreateAssetMenu(fileName = "new ItemConfig", menuName = "Inventory/ItemConfig")]
     public class InventoryItemConfig : ScriptableObject
     {
-        [Tooltip("Разное")]
+        [Tooltip("Р Р°Р·РЅРѕРµ")]
         public ItemType type = ItemType.Miscellaneous;
         public string id;
         public string itemName;

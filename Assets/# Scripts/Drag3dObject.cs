@@ -5,7 +5,7 @@ using UnityEngine.EventSystems;
 namespace BackpackInventory
 {
     /// <summary>
-    /// Добавляет возможность перемещения объекта в 3D пространстве с помощью мыши
+    /// Р”РѕР±Р°РІР»СЏРµС‚ РІРѕР·РјРѕР¶РЅРѕСЃС‚СЊ РїРµСЂРµРјРµС‰РµРЅРёСЏ РѕР±СЉРµРєС‚Р° РІ 3D РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµ СЃ РїРѕРјРѕС‰СЊСЋ РјС‹С€Рё
     /// </summary>
     [RequireComponent(typeof(Rigidbody))]
     public class Drag3dObject : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
@@ -16,11 +16,11 @@ namespace BackpackInventory
         private Collider m_collider;
 
         /// <summary>
-        /// Событие, возникающее в начале перемещения объекта
+        /// РЎРѕР±С‹С‚РёРµ, РІРѕР·РЅРёРєР°СЋС‰РµРµ РІ РЅР°С‡Р°Р»Рµ РїРµСЂРµРјРµС‰РµРЅРёСЏ РѕР±СЉРµРєС‚Р°
         /// </summary>
         public UnityEvent BeginDraggingEvent { get; private set; } = new();
         /// <summary>
-        /// Событие, возникающее после перемещения объекта
+        /// РЎРѕР±С‹С‚РёРµ, РІРѕР·РЅРёРєР°СЋС‰РµРµ РїРѕСЃР»Рµ РїРµСЂРµРјРµС‰РµРЅРёСЏ РѕР±СЉРµРєС‚Р°
         /// </summary>
         public UnityEvent EndDraggingEvent { get; private set; } = new();
 
@@ -28,11 +28,11 @@ namespace BackpackInventory
         {
             m_rigidbody = GetComponent<Rigidbody>();
             m_collider = GetComponent<Collider>();
-            m_objectHeight = m_collider.bounds.extents.y; // Вычисление высоты объекта для корректной установки на поверхности
+            m_objectHeight = m_collider.bounds.extents.y; // Р’С‹С‡РёСЃР»РµРЅРёРµ РІС‹СЃРѕС‚С‹ РѕР±СЉРµРєС‚Р° РґР»СЏ РєРѕСЂСЂРµРєС‚РЅРѕР№ СѓСЃС‚Р°РЅРѕРІРєРё РЅР° РїРѕРІРµСЂС…РЅРѕСЃС‚Рё
         }
 
         /// <summary>
-        /// Отключение динамики объекта в начале перемещения
+        /// РћС‚РєР»СЋС‡РµРЅРёРµ РґРёРЅР°РјРёРєРё РѕР±СЉРµРєС‚Р° РІ РЅР°С‡Р°Р»Рµ РїРµСЂРµРјРµС‰РµРЅРёСЏ
         /// </summary>
         public void OnBeginDrag(PointerEventData eventData)
         {
@@ -42,13 +42,13 @@ namespace BackpackInventory
         }
 
         /// <summary>
-        /// Расчет позиции объекта при перемещении мышью
+        /// Р Р°СЃС‡РµС‚ РїРѕР·РёС†РёРё РѕР±СЉРµРєС‚Р° РїСЂРё РїРµСЂРµРјРµС‰РµРЅРёРё РјС‹С€СЊСЋ
         /// </summary>
         public void OnDrag(PointerEventData eventData)
         {
             Vector3 targetPosition = GetMouseWorldPos() + m_offset;
 
-            // Поиск ближайшей поверхности под объектом
+            // РџРѕРёСЃРє Р±Р»РёР¶Р°Р№С€РµР№ РїРѕРІРµСЂС…РЅРѕСЃС‚Рё РїРѕРґ РѕР±СЉРµРєС‚РѕРј
             RaycastHit? closestHit = GetClosestHit(
                 targetPosition + Vector3.up * 5f,
                 Vector3.down,
@@ -56,7 +56,7 @@ namespace BackpackInventory
                 ~0
             );
 
-            // Корректировка позиции объекта по высоте
+            // РљРѕСЂСЂРµРєС‚РёСЂРѕРІРєР° РїРѕР·РёС†РёРё РѕР±СЉРµРєС‚Р° РїРѕ РІС‹СЃРѕС‚Рµ
             if (closestHit.HasValue)
             {
                 targetPosition.y = closestHit.Value.point.y + m_objectHeight;
@@ -66,13 +66,13 @@ namespace BackpackInventory
         }
 
         /// <summary>
-        /// Включение динамики объекта после перемещения
+        /// Р’РєР»СЋС‡РµРЅРёРµ РґРёРЅР°РјРёРєРё РѕР±СЉРµРєС‚Р° РїРѕСЃР»Рµ РїРµСЂРµРјРµС‰РµРЅРёСЏ
         /// </summary>
         public void OnEndDrag(PointerEventData eventData)
         {
             m_rigidbody.isKinematic = false;
 
-            // Фиксация конечной позиции с учетом поверхности
+            // Р¤РёРєСЃР°С†РёСЏ РєРѕРЅРµС‡РЅРѕР№ РїРѕР·РёС†РёРё СЃ СѓС‡РµС‚РѕРј РїРѕРІРµСЂС…РЅРѕСЃС‚Рё
             RaycastHit? closestHit = GetClosestHit(
                 transform.position + Vector3.up * 5f,
                 Vector3.down,
@@ -91,9 +91,9 @@ namespace BackpackInventory
         }
 
         /// <summary>
-        /// Получение позиции мыши на поверхности предметов и окружения
+        /// РџРѕР»СѓС‡РµРЅРёРµ РїРѕР·РёС†РёРё РјС‹С€Рё РЅР° РїРѕРІРµСЂС…РЅРѕСЃС‚Рё РїСЂРµРґРјРµС‚РѕРІ Рё РѕРєСЂСѓР¶РµРЅРёСЏ
         /// </summary>
-        /// <returns>Позиция Vector3 в глобальной системе координат</returns>
+        /// <returns>РџРѕР·РёС†РёСЏ Vector3 РІ РіР»РѕР±Р°Р»СЊРЅРѕР№ СЃРёСЃС‚РµРјРµ РєРѕРѕСЂРґРёРЅР°С‚</returns>
         private Vector3 GetMouseWorldPos()
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -108,13 +108,13 @@ namespace BackpackInventory
         }
 
         /// <summary>
-        /// Находит ближайшее пересечение луча с поверхностями, игнорируя собственный коллайдер
+        /// РќР°С…РѕРґРёС‚ Р±Р»РёР¶Р°Р№С€РµРµ РїРµСЂРµСЃРµС‡РµРЅРёРµ Р»СѓС‡Р° СЃ РїРѕРІРµСЂС…РЅРѕСЃС‚СЏРјРё, РёРіРЅРѕСЂРёСЂСѓСЏ СЃРѕР±СЃС‚РІРµРЅРЅС‹Р№ РєРѕР»Р»Р°Р№РґРµСЂ
         /// </summary>
-        /// <param name="origin">Начальная точка луча</param>
-        /// <param name="direction">Направление луча</param>
-        /// <param name="maxDistance">Максимальная дистанция</param>
-        /// <param name="layerMask">Маска слоев</param>
-        /// <returns>Ближайшее пересечение или null</returns>
+        /// <param name="origin">РќР°С‡Р°Р»СЊРЅР°СЏ С‚РѕС‡РєР° Р»СѓС‡Р°</param>
+        /// <param name="direction">РќР°РїСЂР°РІР»РµРЅРёРµ Р»СѓС‡Р°</param>
+        /// <param name="maxDistance">РњР°РєСЃРёРјР°Р»СЊРЅР°СЏ РґРёСЃС‚Р°РЅС†РёСЏ</param>
+        /// <param name="layerMask">РњР°СЃРєР° СЃР»РѕРµРІ</param>
+        /// <returns>Р‘Р»РёР¶Р°Р№С€РµРµ РїРµСЂРµСЃРµС‡РµРЅРёРµ РёР»Рё null</returns>
         private RaycastHit? GetClosestHit(Vector3 origin, Vector3 direction, float maxDistance, LayerMask layerMask)
         {
             Ray ray = new Ray(origin, direction);

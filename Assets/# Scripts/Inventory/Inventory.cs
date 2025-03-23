@@ -8,38 +8,38 @@ using Cysharp.Threading.Tasks;
 namespace BackpackInventory
 {
     /// <summary>
-    /// Система инвентаря, предназначенная для хранения объектов в 3д и логически
+    /// РЎРёСЃС‚РµРјР° РёРЅРІРµРЅС‚Р°СЂСЏ, РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅРЅР°СЏ РґР»СЏ С…СЂР°РЅРµРЅРёСЏ РѕР±СЉРµРєС‚РѕРІ РІ 3Рґ Рё Р»РѕРіРёС‡РµСЃРєРё
     /// </summary>
     public class Inventory : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         [Header("Inventory Config")]
-        [Tooltip("Если установлено значение 0, то максимальный вес неограничен")]
+        [Tooltip("Р•СЃР»Рё СѓСЃС‚Р°РЅРѕРІР»РµРЅРѕ Р·РЅР°С‡РµРЅРёРµ 0, С‚Рѕ РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ РІРµСЃ РЅРµРѕРіСЂР°РЅРёС‡РµРЅ")]
         [SerializeField] private int maxTotalWeight = 0; // if 0 then unlimited
         [SerializeField] private Slot[] slots;
 
         [Header("Binding")]
-        [Tooltip("Область в которой объект считается помещенным в инвентарь")]
+        [Tooltip("РћР±Р»Р°СЃС‚СЊ РІ РєРѕС‚РѕСЂРѕР№ РѕР±СЉРµРєС‚ СЃС‡РёС‚Р°РµС‚СЃСЏ РїРѕРјРµС‰РµРЅРЅС‹Рј РІ РёРЅРІРµРЅС‚Р°СЂСЊ")]
         [SerializeField] private Collider triggerZone;
         [SerializeField] private InventoryGUI inventoryGUI;
 
 
         /// <summary>
-        /// Слоты инвентаря
+        /// РЎР»РѕС‚С‹ РёРЅРІРµРЅС‚Р°СЂСЏ
         /// </summary>
         public Slot[] Slots => slots;
         /// <summary>
-        /// Текущий вес инвентаря
+        /// РўРµРєСѓС‰РёР№ РІРµСЃ РёРЅРІРµРЅС‚Р°СЂСЏ
         /// </summary>
         public int CurrentWeight
         {
             get => slots.Where(x => x.Item is not null).Sum(x => x.Item.Config.weight);
         }
         /// <summary>
-        /// Событие добавление предмета в инвентарь
+        /// РЎРѕР±С‹С‚РёРµ РґРѕР±Р°РІР»РµРЅРёРµ РїСЂРµРґРјРµС‚Р° РІ РёРЅРІРµРЅС‚Р°СЂСЊ
         /// </summary>
         public UnityEvent<string> ItemAddedEvent { get; private set; } = new();
         /// <summary>
-        /// Событие удаление предмета из инвентаря
+        /// РЎРѕР±С‹С‚РёРµ СѓРґР°Р»РµРЅРёРµ РїСЂРµРґРјРµС‚Р° РёР· РёРЅРІРµРЅС‚Р°СЂСЏ
         /// </summary>
         public UnityEvent<string> ItemRemovedEvent { get; private set; } = new();
 
@@ -65,9 +65,9 @@ namespace BackpackInventory
 
 
         /// <summary>
-        /// Добавление предмета в инвентарь
+        /// Р”РѕР±Р°РІР»РµРЅРёРµ РїСЂРµРґРјРµС‚Р° РІ РёРЅРІРµРЅС‚Р°СЂСЊ
         /// </summary>
-        /// <returns>Возвращает true при успешном добавлении</returns>
+        /// <returns>Р’РѕР·РІСЂР°С‰Р°РµС‚ true РїСЂРё СѓСЃРїРµС€РЅРѕРј РґРѕР±Р°РІР»РµРЅРёРё</returns>
         public bool PutItem(Item item)
         {
             if (item is null)
@@ -75,15 +75,15 @@ namespace BackpackInventory
 
             ItemType itemType = item.Config.type;
 
-            // Поиск пустого слота по типу, если таких слотов нет, то поиск слотов принимающих любые предметы
+            // РџРѕРёСЃРє РїСѓСЃС‚РѕРіРѕ СЃР»РѕС‚Р° РїРѕ С‚РёРїСѓ, РµСЃР»Рё С‚Р°РєРёС… СЃР»РѕС‚РѕРІ РЅРµС‚, С‚Рѕ РїРѕРёСЃРє СЃР»РѕС‚РѕРІ РїСЂРёРЅРёРјР°СЋС‰РёС… Р»СЋР±С‹Рµ РїСЂРµРґРјРµС‚С‹
             Slot slot =
                 slots.Where(x => x.ItemType == itemType && x.Item is null).FirstOrDefault() ??
                 slots.Where(x => x.isAny).FirstOrDefault();
 
-            // Добавление предмета в доступный слот
+            // Р”РѕР±Р°РІР»РµРЅРёРµ РїСЂРµРґРјРµС‚Р° РІ РґРѕСЃС‚СѓРїРЅС‹Р№ СЃР»РѕС‚
             if (slot is not null)
             {
-                // Логика добавления, при переполнении допустимого веса
+                // Р›РѕРіРёРєР° РґРѕР±Р°РІР»РµРЅРёСЏ, РїСЂРё РїРµСЂРµРїРѕР»РЅРµРЅРёРё РґРѕРїСѓСЃС‚РёРјРѕРіРѕ РІРµСЃР°
                 if (maxTotalWeight > 0 && CurrentWeight + item.Config.weight > maxTotalWeight)
                 {
                     return false;
@@ -102,18 +102,18 @@ namespace BackpackInventory
         }
 
         /// <summary>
-        /// Удаление предмета из инвентаря
+        /// РЈРґР°Р»РµРЅРёРµ РїСЂРµРґРјРµС‚Р° РёР· РёРЅРІРµРЅС‚Р°СЂСЏ
         /// </summary>
-        /// <returns>Возвращает true при успешном добавлении</returns>
+        /// <returns>Р’РѕР·РІСЂР°С‰Р°РµС‚ true РїСЂРё СѓСЃРїРµС€РЅРѕРј РґРѕР±Р°РІР»РµРЅРёРё</returns>
         public bool RemoveItem(Item item)
         {
             if (item is null)
                 throw new("Item is null");
 
-            // Поиск предмета в слотах
+            // РџРѕРёСЃРє РїСЂРµРґРјРµС‚Р° РІ СЃР»РѕС‚Р°С…
             Slot slot = slots.Where(x => x.Item == item).FirstOrDefault();
 
-            // Удаление предмета из слота и перенос на сцену
+            // РЈРґР°Р»РµРЅРёРµ РїСЂРµРґРјРµС‚Р° РёР· СЃР»РѕС‚Р° Рё РїРµСЂРµРЅРѕСЃ РЅР° СЃС†РµРЅСѓ
             if (slot is not null)
             {
                 slot.Item = null;
@@ -129,15 +129,15 @@ namespace BackpackInventory
 
 
         /// <summary>
-        /// Получение предмета, если курсор находится на предмете
+        /// РџРѕР»СѓС‡РµРЅРёРµ РїСЂРµРґРјРµС‚Р°, РµСЃР»Рё РєСѓСЂСЃРѕСЂ РЅР°С…РѕРґРёС‚СЃСЏ РЅР° РїСЂРµРґРјРµС‚Рµ
         /// </summary>
         private Item GetItemUnderCursor()
         {
-            // Создание луча из позиции курсора
+            // РЎРѕР·РґР°РЅРёРµ Р»СѓС‡Р° РёР· РїРѕР·РёС†РёРё РєСѓСЂСЃРѕСЂР°
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            Physics.Raycast(ray, out hit); // Бросание луча (raycast)
+            Physics.Raycast(ray, out hit); // Р‘СЂРѕСЃР°РЅРёРµ Р»СѓС‡Р° (raycast)
 
             return hit.transform.GetComponent<Item>();
         }

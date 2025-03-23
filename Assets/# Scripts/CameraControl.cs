@@ -3,32 +3,32 @@ using UnityEngine;
 namespace BackpackInventory
 {
     /// <summary>
-    /// Скрипт управления вертикальным поворотом камеры
+    /// РЎРєСЂРёРїС‚ СѓРїСЂР°РІР»РµРЅРёСЏ РІРµСЂС‚РёРєР°Р»СЊРЅС‹Рј РїРѕРІРѕСЂРѕС‚РѕРј РєР°РјРµСЂС‹
     /// </summary>
     public class CameraControl : MonoBehaviour
     {
-        [Tooltip("Скорость поворота камеры")]
+        [Tooltip("РЎРєРѕСЂРѕСЃС‚СЊ РїРѕРІРѕСЂРѕС‚Р° РєР°РјРµСЂС‹")]
         [SerializeField] private float rotationSpeed = 14.0f;
         [SerializeField] private float minAngle = -45f;
         [SerializeField] private float maxAngle = 45f;
 
-        private float m_xRotation = 0f; // Текущий угол поворота по оси X
+        private float m_xRotation = 0f; // РўРµРєСѓС‰РёР№ СѓРіРѕР» РїРѕРІРѕСЂРѕС‚Р° РїРѕ РѕСЃРё X
 
         private void Update()
         {
             float mouseInput = 0f;
 
-            // Считывание значений ввода
+            // РЎС‡РёС‚С‹РІР°РЅРёРµ Р·РЅР°С‡РµРЅРёР№ РІРІРѕРґР°
             if (Input.GetKey(KeyCode.W))
                 mouseInput = 1f;
             else if (Input.GetKey(KeyCode.S))
                 mouseInput = -1f;
 
-            // Вычисление угла поворота с учетом времени между кадрами
+            // Р’С‹С‡РёСЃР»РµРЅРёРµ СѓРіР»Р° РїРѕРІРѕСЂРѕС‚Р° СЃ СѓС‡РµС‚РѕРј РІСЂРµРјРµРЅРё РјРµР¶РґСѓ РєР°РґСЂР°РјРё
             m_xRotation -= mouseInput * rotationSpeed * Time.deltaTime;
             m_xRotation = Mathf.Clamp(m_xRotation, minAngle, maxAngle);
 
-            // Изменение угла поворота
+            // РР·РјРµРЅРµРЅРёРµ СѓРіР»Р° РїРѕРІРѕСЂРѕС‚Р°
             Vector3 currentRotation = transform.localEulerAngles;
             transform.localEulerAngles = new Vector3(m_xRotation, currentRotation.y, currentRotation.z);
         }

@@ -7,8 +7,8 @@ using BackpackInventory;
 namespace RH.Instruments
 {
     /// <summary>
-    /// Делает скриншоты объектов на сцене видимые камерой, сохраняет их в определенной папке и связывает их с InventoryItemConfig.
-    /// Скрипт перебирает игровые объекты и создает иконки каждого отдельно.
+    /// Р”РµР»Р°РµС‚ СЃРєСЂРёРЅС€РѕС‚С‹ РѕР±СЉРµРєС‚РѕРІ РЅР° СЃС†РµРЅРµ РІРёРґРёРјС‹Рµ РєР°РјРµСЂРѕР№, СЃРѕС…СЂР°РЅСЏРµС‚ РёС… РІ РѕРїСЂРµРґРµР»РµРЅРЅРѕР№ РїР°РїРєРµ Рё СЃРІСЏР·С‹РІР°РµС‚ РёС… СЃ InventoryItemConfig.
+    /// РЎРєСЂРёРїС‚ РїРµСЂРµР±РёСЂР°РµС‚ РёРіСЂРѕРІС‹Рµ РѕР±СЉРµРєС‚С‹ Рё СЃРѕР·РґР°РµС‚ РёРєРѕРЅРєРё РєР°Р¶РґРѕРіРѕ РѕС‚РґРµР»СЊРЅРѕ.
     /// </summary>
     public class IconGenerator : MonoBehaviour
     {
@@ -28,7 +28,7 @@ namespace RH.Instruments
 
 #if UNITY_EDITOR
         /// <summary>
-        /// Запускает процесс создаения иконок для списка игровых объектов
+        /// Р—Р°РїСѓСЃРєР°РµС‚ РїСЂРѕС†РµСЃСЃ СЃРѕР·РґР°РµРЅРёСЏ РёРєРѕРЅРѕРє РґР»СЏ СЃРїРёСЃРєР° РёРіСЂРѕРІС‹С… РѕР±СЉРµРєС‚РѕРІ
         /// </summary>
         [ContextMenu("Screenshot")]
         private void ProcessScreenshots()
@@ -37,7 +37,7 @@ namespace RH.Instruments
         }
 
         /// <summary>
-        /// Перебирает игровые объекты и создает иконку для каждого
+        /// РџРµСЂРµР±РёСЂР°РµС‚ РёРіСЂРѕРІС‹Рµ РѕР±СЉРµРєС‚С‹ Рё СЃРѕР·РґР°РµС‚ РёРєРѕРЅРєСѓ РґР»СЏ РєР°Р¶РґРѕРіРѕ
         /// </summary>
         /// <returns></returns>
         private IEnumerator Screenshot()
@@ -65,18 +65,18 @@ namespace RH.Instruments
         }
 
         /// <summary>
-        /// Создает скриншот экрана и сохраняет его по указаному пути
+        /// РЎРѕР·РґР°РµС‚ СЃРєСЂРёРЅС€РѕС‚ СЌРєСЂР°РЅР° Рё СЃРѕС…СЂР°РЅСЏРµС‚ РµРіРѕ РїРѕ СѓРєР°Р·Р°РЅРѕРјСѓ РїСѓС‚Рё
         /// </summary>
         private void TakeScreenshot(string fullPath)
         {
             if (_camera is null)
                 throw new("Camera is missing");
 
-            // Сохранение настроек камеры в буфере
+            // РЎРѕС…СЂР°РЅРµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РєР°РјРµСЂС‹ РІ Р±СѓС„РµСЂРµ
             CameraClearFlags clearFlags = _camera.clearFlags;
             _camera.clearFlags = CameraClearFlags.Depth;
 
-            // Алгоритм создания скриншота камеры
+            // РђР»РіРѕСЂРёС‚Рј СЃРѕР·РґР°РЅРёСЏ СЃРєСЂРёРЅС€РѕС‚Р° РєР°РјРµСЂС‹
             var rt = new RenderTexture(256, 256, 24);
             _camera.targetTexture = rt;
             var screenshot = new Texture2D(256, 256, TextureFormat.ARGB32, false);
@@ -101,7 +101,7 @@ namespace RH.Instruments
             AssetDatabase.Refresh();
 #endif
 
-            _camera.clearFlags = clearFlags; // восстановление настроек камеры
+            _camera.clearFlags = clearFlags; // РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РЅР°СЃС‚СЂРѕРµРє РєР°РјРµСЂС‹
         }
 #endif
     }

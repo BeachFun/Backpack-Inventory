@@ -3,7 +3,7 @@ using Zenject;
 namespace BackpackInventory
 {
     /// <summary>
-    /// Класс предназначенный для регистрации не Monobehaviour классов в DI контейнере
+    /// РљР»Р°СЃСЃ РїСЂРµРґРЅР°Р·РЅР°С‡РµРЅРЅС‹Р№ РґР»СЏ СЂРµРіРёСЃС‚СЂР°С†РёРё РЅРµ Monobehaviour РєР»Р°СЃСЃРѕРІ РІ DI РєРѕРЅС‚РµР№РЅРµСЂРµ
     /// </summary>
     public class GameInstaller : MonoInstaller
     {

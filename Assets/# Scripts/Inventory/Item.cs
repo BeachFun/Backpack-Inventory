@@ -26,14 +26,14 @@ namespace BackpackInventory
             m_rigidbody = GetComponent<Rigidbody>();
             m_dragSystem = GetComponent<Drag3dObject>();
 
-            // Подписка на события перемещения объекта
+            // РџРѕРґРїРёСЃРєР° РЅР° СЃРѕР±С‹С‚РёСЏ РїРµСЂРµРјРµС‰РµРЅРёСЏ РѕР±СЉРµРєС‚Р°
             m_dragSystem.BeginDraggingEvent.AddListener(OnBeginDragging);
             m_dragSystem.EndDraggingEvent.AddListener(OnEndDragging);
         }
 
         private void OnDestroy()
         {
-            // Отписка от событий перемещения объекта
+            // РћС‚РїРёСЃРєР° РѕС‚ СЃРѕР±С‹С‚РёР№ РїРµСЂРµРјРµС‰РµРЅРёСЏ РѕР±СЉРµРєС‚Р°
             m_dragSystem.BeginDraggingEvent.RemoveListener(OnBeginDragging);
             m_dragSystem.EndDraggingEvent.RemoveListener(OnEndDragging);
         }
@@ -44,7 +44,7 @@ namespace BackpackInventory
             m_isDragging = true;
             m_positionOnStartDrag = transform.position;
 
-            // Если предмет уже находится в инвентаре, удалить его оттуда перед перетаскиванием
+            // Р•СЃР»Рё РїСЂРµРґРјРµС‚ СѓР¶Рµ РЅР°С…РѕРґРёС‚СЃСЏ РІ РёРЅРІРµРЅС‚Р°СЂРµ, СѓРґР°Р»РёС‚СЊ РµРіРѕ РѕС‚С‚СѓРґР° РїРµСЂРµРґ РїРµСЂРµС‚Р°СЃРєРёРІР°РЅРёРµРј
             if (_inventory is not null)
             {
                 _inventory.RemoveItem(this);
@@ -55,10 +55,10 @@ namespace BackpackInventory
         {
             m_isDragging = false;
 
-            // Если предмет был отпущен в зоне инвентаря, добавляем его в инвентарь
+            // Р•СЃР»Рё РїСЂРµРґРјРµС‚ Р±С‹Р» РѕС‚РїСѓС‰РµРЅ РІ Р·РѕРЅРµ РёРЅРІРµРЅС‚Р°СЂСЏ, РґРѕР±Р°РІР»СЏРµРј РµРіРѕ РІ РёРЅРІРµРЅС‚Р°СЂСЊ
             if (_inventory is not null)
             {
-                // Положить предмет в инвентарь, если не удалось, то вернуть предмет на исходную позицию
+                // РџРѕР»РѕР¶РёС‚СЊ РїСЂРµРґРјРµС‚ РІ РёРЅРІРµРЅС‚Р°СЂСЊ, РµСЃР»Рё РЅРµ СѓРґР°Р»РѕСЃСЊ, С‚Рѕ РІРµСЂРЅСѓС‚СЊ РїСЂРµРґРјРµС‚ РЅР° РёСЃС…РѕРґРЅСѓСЋ РїРѕР·РёС†РёСЋ
                 m_isInInventory = _inventory.PutItem(this);
                 if (m_isInInventory)
                 {
@@ -90,23 +90,23 @@ namespace BackpackInventory
 
         public void OnPointerDown(PointerEventData eventData)
         {
-            // Необходим для выполнения метода OnPointerUp
+            // РќРµРѕР±С…РѕРґРёРј РґР»СЏ РІС‹РїРѕР»РЅРµРЅРёСЏ РјРµС‚РѕРґР° OnPointerUp
         }
 
         /// <summary>
-        /// Перемещение предмета из инвентаря на сцену, если он находится в нем
+        /// РџРµСЂРµРјРµС‰РµРЅРёРµ РїСЂРµРґРјРµС‚Р° РёР· РёРЅРІРµРЅС‚Р°СЂСЏ РЅР° СЃС†РµРЅСѓ, РµСЃР»Рё РѕРЅ РЅР°С…РѕРґРёС‚СЃСЏ РІ РЅРµРј
         /// </summary>
         public void OnPointerUp(PointerEventData eventData)
         {
             if (!m_isInInventory) return;
 
-            // Удаление предмета из инвентаря
+            // РЈРґР°Р»РµРЅРёРµ РїСЂРµРґРјРµС‚Р° РёР· РёРЅРІРµРЅС‚Р°СЂСЏ
             if (_inventory.RemoveItem(this))
             {
                 m_isInInventory = false;
             }
 
-            // Получуение центра экрана в пикселях и преобразование экранных координат в мировые, если начальной позиции нет
+            // РџРѕР»СѓС‡СѓРµРЅРёРµ С†РµРЅС‚СЂР° СЌРєСЂР°РЅР° РІ РїРёРєСЃРµР»СЏС… Рё РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ СЌРєСЂР°РЅРЅС‹С… РєРѕРѕСЂРґРёРЅР°С‚ РІ РјРёСЂРѕРІС‹Рµ, РµСЃР»Рё РЅР°С‡Р°Р»СЊРЅРѕР№ РїРѕР·РёС†РёРё РЅРµС‚
             if (m_positionOnStartDrag is null)
             {
                 Vector3 screenCenter = new Vector3(Screen.width / 2f, Screen.height / 2f, Camera.main.WorldToScreenPoint(transform.position).z);
@@ -114,7 +114,7 @@ namespace BackpackInventory
             }
 
             _inventory = null;
-            transform.DOMove(m_positionOnStartDrag.Value, .4f); // Перемещение объекта на исходную позицию
+            transform.DOMove(m_positionOnStartDrag.Value, .4f); // РџРµСЂРµРјРµС‰РµРЅРёРµ РѕР±СЉРµРєС‚Р° РЅР° РёСЃС…РѕРґРЅСѓСЋ РїРѕР·РёС†РёСЋ
         }
     }
 }
