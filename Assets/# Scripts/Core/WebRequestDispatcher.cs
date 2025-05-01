@@ -13,7 +13,7 @@ namespace BackpackInventory
     public class WebRequestDispatcher : IDisposable
     {
         private const string _serverUrl = "https://wadahub.manerai.com/api/inventory/status";
-        private readonly string _authToken;
+        private readonly string _authToken = "kPERnYcWAY46xaSy8CEzanosAgsWM84Nx7SKM4QBSqPq6c7StWfGxzhxPfDh8MaP";
 
         private Inventory _inventory;
 
@@ -22,8 +22,6 @@ namespace BackpackInventory
         public WebRequestDispatcher(Inventory inventory)
         {
             _inventory = inventory;
-
-            _authToken = File.ReadAllText("D:\\Token.txt");
 
             _inventory?.ItemAddedEvent.AddListener(OnItemAdded);
             _inventory?.ItemRemovedEvent.AddListener(OnItemRemoved);
